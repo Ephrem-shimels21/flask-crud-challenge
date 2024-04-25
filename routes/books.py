@@ -14,6 +14,13 @@ def parse_date(date_str):
         raise ValueError("Invalid date format (must be YYYY-MM-DD)")
 
 
+@books_blueprint.app_errorhandler(ValueError)
+def handle_value_error(error):
+    response = jsonify({"error": str(error)})
+    response.status_code = 400
+    return response
+
+
 @books_blueprint.route("/books", methods=["GET"])
 def get_books():
     return jsonify(book_storage.get_books()), 200
